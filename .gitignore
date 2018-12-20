@@ -1,0 +1,12 @@
+#Window
+Thumbs.db
+ehthumbs.db
+Destop.ini
+
+#Python
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
