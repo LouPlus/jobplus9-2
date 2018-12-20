@@ -1,0 +1,18 @@
+.form {
+  width: 400px;
+  margin: 0 auto;
+}
+
+a,
+a:hover,
+a:visited {
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+
+.nav-pagination {
+  text-align: center;
+}
+
+
