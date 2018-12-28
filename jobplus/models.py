@@ -15,6 +15,13 @@ class Base(db.Model):
                            onupdate=datetime.utcnow)
 
 
+user_job = db.Table(
+        'user_job',
+        db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete='CASCADE')),
+        db.Column('job_id', db.Integer, db.ForeignKey('job.id', ondelete='CASCADE'))
+        )
+
+
 class User(Base, UserMixin):
     __tablename__ = 'user'
 
@@ -27,6 +34,9 @@ class User(Base, UserMixin):
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
     _password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
+    resume = db.relationship('Resume', userlist=False)
+    collect_jobs = db.relationship('Job', secondary=user_job)
+    upload_resume_url = db.Column(db.String(64))
 
     def __repr__(self):
         return '<User:{}>'.format(self.username)
@@ -55,8 +65,18 @@ class Job(Base):
     __tablename__ = 'job'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), unique=True, index=True, nullable=False)
-    description = db.Column(db.String(256), nullable=False)
+    name = db.Column(db.String(24))
+    salary_low = db.Column(db.Integer, nullable=False)
+    salary_high = db.Column(db.Integer, nullable=False)
+    location = db.Column(db.String(24))
+    tags = db.Column(db.String(128))
+    experience_requirement = db.Column(db.String(32))
+    degree_requirement = db.Column(db.String(32))
+    is_fulltime = db.Column(db.Boolean, default=True)
+    is_open = db.Column(db.Boolean, default=True)
+    company_id = db.Column('company_id', db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
+    company = db.relationship('Company', userlist=False)
+    views_count = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<Job:{}>'.format(self.name)
@@ -68,9 +88,94 @@ class Company(Base):
     __tablename__ = 'company'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), unique=True, index=True, nullable=False)
-    description = db.Column(db.String(256), nullable=False)
+    name = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    slug = db.Column(db.String(24), unique=True, index=True, nullable=False)
+    logo = db.Column(db.String(64), nullable=False)
+    site = db.Column(db.String(64), nullable=False)
+    contact = db.Column(db.String(24), nullable=False)
+    email = db.Column(db.String(24), nullable=False)
+    location = db.Column(db.String(24), nullable=False)
+    description = db.Column(db.String(100))
+    about = db.Column(db.String(1024))
+    tags = db.Column(db.String(128))
+    # Company technology stack
+    stack = db.Column(db.String(128))
+    team_introduction = db.Column(db.String(256))
+    welfares = db.Column(db.String(256))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    user = db.relationship('User', userlist=False, backref=db.backref('company', userlist=False))
 
     def __repr__(self):
         return '<Company:{}>'.format(self.name)
+
+
+class Dilivery(Base):
+    __tablename__ = 'dilivery'
+
+    STATUS_WAITING = 1
+    STATUS_REJECT = 2
+    STATUS_ACCEPT = 3
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
+    status = db.Column(db.SmallInteger, default=STATUS_WAITING)
+    response = db.Column(db.String(256))
+
+
+class Resume(Base):
+    __tablename__ = 'resume'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', userlist=False)
+    job_experiences = db.relationship('JobExperience')
+    edu_experiences = db.relationship('EduExperience')
+    project_experiences = db.relationship('ProjectExperience')
+
+    def profile(self):
+        pass
+
+
+class Experience(Base):
+    __abstract__ = True
+
+    id = db.Column(db.Integer, primary_key=True)
+    begin_at = db.Column(db.DateTime)
+    end_at = db.Column(db.DateTime)
+    description = db.Column(db.String(1024))
+
+
+class JobExperience(Experience):
+    __tablename__ = 'job_experience'
+
+    company = db.Column(db.String(32), nullable=False)
+    city = db.Column(db.String(32), nullable=False)
+    resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
+    resume = db.relationship('Resume', userlist=False)
+
+
+class EduExperience(Experience):
+    __tablename__ = 'edu_experience'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
