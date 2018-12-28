@@ -158,11 +158,21 @@ class JobExperience(Experience):
 class EduExperience(Experience):
     __tablename__ = 'edu_experience'
 
+    school = db.Column(db.String(32), nullable=False)
+    specialty = db.Column(db.String(32), nullable=False)
+    degree = db.Column(db.String(16))
+    resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
+    resume = db.relationship('Resume', userlist=False)
 
 
+class ProjectExperience(Experience):
+    __tablename__ = 'project_experience'
 
-
-
+    school = db.Column(db.String(32), nullable=False)
+    role = db.Column(db.String(32))
+    technologys = db.Column(db.String(64))
+    resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
+    resume = db.relationship('Resume', userlist=False)
 
 
 
