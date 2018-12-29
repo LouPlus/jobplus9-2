@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_migrate import Migrate
 from jobplus.config import configs
 from jobplus.models import db, User
@@ -20,10 +20,20 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
-    from .handlers import front, admin
-    app.register_blueprint(front)
-    app.register_blueprint(admin)
+    from .handlers import blueprints
+    for bp in blueprints:
+        app.register_blueprint(bp)
     pass
+
+def register_error_handlers(app):
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return render_template('error/404.html'), 404
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return render_template('error/500.html'), 500
 
 
 def create_app(config):
