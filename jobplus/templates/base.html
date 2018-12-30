@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %}</title>
         {% block head_css %}
-        <link rel="stylesheet" href="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
         {% endblock %}
     </head>
@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li class="active"><a href="/">Job<span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Company</a></li>
+            <li class="active"><a href="/">Company<span class="sr-only">(current)</span></a></li>
             {% if current_user.is_authenticated and current_user.is_admin %}
             <li><a href="{{ url_for('admin.index') }}">Control</a></li>
             {% endif %}
@@ -34,7 +34,8 @@
         </ul> 
         <ul class="nav navbar-nav navbar-right">
             {% if not current_user.is_authenticated %}
-            <li><a href="{{ url_for('front.register') }}">Register</a></li>
+            <li><a href="{{ url_for('front.userregister') }}">UserRegister</a></li>
+            <li><a href="{{ url_for('front.companyregister') }}">CompanyRegister</a></li>
             <li><a href="{{ url_for('front.login') }}">Sign in</a></li>
             {% else %}
             <li class="dropdown">
@@ -64,10 +65,14 @@
       {% endwith %}
 
       {% block body %}{% endblock %}
-      {% block footer %}{% endblock %}
+      {% block footer %}
+        <div class="footer">Copyright &copy 2019 By Python+9-2</div>
+      {% endblock %}
       </div>
       {% block tail_js %}
-      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="static/main.js"></script>
       {% endblock %}
     </body>    
 </html>
