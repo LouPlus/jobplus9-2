@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
-from jobplus.models import User
+from jobplus.models import db, User, Job
 from jobplus.forms import RegisterForm, LoginForm
 from flask_login import login_user, logout_user, login_required
 
@@ -8,17 +8,9 @@ front = Blueprint('front', __name__)
 
 @front.route('/')
 def index():
-    '''
-    page = request.args.get('page', default=1, type=int)
-    pagination = Job.query.paginate(
-        page=page,
-        per_page=current_app.config['INDEX_PER_PAGE'],
-        error_out=False
-    )
-    return render_template('index.html', pagination=pagination)
-    '''
-    return render_template('index.html')
-
+    newest_jobs = Job.query.order_by(Job.created_at.desc()).limit(8)
+    newest_companies = User.query.filter(User.role==User.ROLE_COMPANY).order_by(User.created_at.desc()).limit(8)
+    return render_template('index.html', newest_jobs=newest_jobs, newest_companies=newest_companies)
 
 
 @front.route('/login', methods=['GET', 'POST'])
@@ -27,18 +19,23 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         login_user(user, form.remember_me.data)
-        return redirect(url_for('.index'))
+        next = 'user.profile'
+        if user.is_admin:
+            next = 'admin.index'
+        elif user.is_company:
+            next = 'company.profile'
+        return redirect(url_for('next'))
     return render_template('login.html', form=form)
 
 
-@front.route('/register', methods=['GET', 'POST'])
-def register():
+@front.route('/userregister', methods=['GET', 'POST'])
+def userregister():
     form = RegisterForm()
     if form.validate_on_submit():
         form.create_user()
         flash('Register success,please login!', 'success')
         return redirect(url_for('.login'))
-    return render_template('register.html', form=form)
+    return render_template('userregister.html', form=form)
 
 
 @front.route('/logout')
