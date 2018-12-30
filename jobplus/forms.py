@@ -46,3 +46,27 @@ class RegisterForm(FlaskForm):
         return user
 
 
+class UserProfileForm(FlaskForm):
+    real_name = StringField('RealName')
+    email = StringField('Email', validators=[Required(), Email()])
+    password = PasswordField('Password(If not filled, remain unchanged)')
+    phone = StringField('Phone Number')
+    work_years = IntegerField('Working Years')
+    resume_url = StringField('Resume Url')
+    submit = SubmitField('Submit')
+
+    def validate_phone(self, field):
+        phone = field.data
+        if phone[:2] not in ('13', '15', '18') and len(phone) != 11:
+            raise ValidationError('Please input valid mobile phone number')
+
+    def update_profile(self, user):
+        user.real_name = self.real_name.data
+        user.email = self.email.data
+        if self.password.data:
+            user.password = self.password.data
+        user.phone = self.phone.data
+        user.work_years = self.work_years.data
+        user.resume_url = self.resume_url.data
+        db.session.add(user)
+        db.session.commit()
