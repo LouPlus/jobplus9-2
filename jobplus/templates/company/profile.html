@@ -1,0 +1,8 @@
+se.html" %}
+{% from "macros.html" import render_form %}
+
+{% block body %}
+<h3>Edit Company Info</h3>
+{{ render_form(form, url_for('company.profile')) }}
+{% endblock %}
+
