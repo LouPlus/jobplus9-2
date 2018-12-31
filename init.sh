@@ -11,4 +11,6 @@ sudo pip install -r requirements.txt
 export FLASK_APP=manage.py
 export FLASK_DEBUG=1
 
-
+flask db init
+flask db migrate -m 'init database'
+flask db upgrade

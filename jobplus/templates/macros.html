@@ -62,7 +62,7 @@
     <div class="job-box">
       <div class="caption">
       <b>{{ job.name }}</b>
-      <p>{% if job.experience_requirement != "unlimited" %} {{ job.experience_requirement }}+ years work experience{% else %}No work experience required | {% if job.degree_requirement != "unlimited" %} {{ job.degree_requirement }}'s degree{% else %}No degree required</p>
+      <p>{% if job.experience_requirement != "unlimited" %} {{ job.experience_requirement }}+ years work experience{% else %}No work experience required | {% endif %}{% if job.degree_requirement != "unlimited" %} {{ job.degree_requirement }}'s degree{% else %}No degree required {% endif %}</p>
       {% for tag in job.tag_list %}
         <span class="label label-default">{{ tag }}</span>
       {% endfor %}
