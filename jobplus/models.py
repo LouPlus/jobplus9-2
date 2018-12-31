@@ -34,7 +34,7 @@ class User(Base, UserMixin):
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
     _password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
-    resume = db.relationship('Resume', userlist=False)
+    resume = db.relationship('Resume', uselist=False)
     collect_jobs = db.relationship('Job', secondary=user_job)
     upload_resume_url = db.Column(db.String(64))
 
@@ -75,7 +75,7 @@ class Job(Base):
     is_fulltime = db.Column(db.Boolean, default=True)
     is_open = db.Column(db.Boolean, default=True)
     company_id = db.Column('company_id', db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
-    company = db.relationship('Company', userlist=False)
+    company = db.relationship('Company', uselist=False)
     views_count = db.Column(db.Integer, default=0)
 
     def __repr__(self):
@@ -103,7 +103,7 @@ class Company(Base):
     team_introduction = db.Column(db.String(256))
     welfares = db.Column(db.String(256))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
-    user = db.relationship('User', userlist=False, backref=db.backref('company', userlist=False))
+    user = db.relationship('User', uselist=False, backref=db.backref('company', uselist=False))
 
     def __repr__(self):
         return '<Company:{}>'.format(self.name)
@@ -128,7 +128,7 @@ class Resume(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', userlist=False)
+    user = db.relationship('User', uselist=False)
     job_experiences = db.relationship('JobExperience')
     edu_experiences = db.relationship('EduExperience')
     project_experiences = db.relationship('ProjectExperience')
@@ -152,7 +152,7 @@ class JobExperience(Experience):
     company = db.Column(db.String(32), nullable=False)
     city = db.Column(db.String(32), nullable=False)
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
-    resume = db.relationship('Resume', userlist=False)
+    resume = db.relationship('Resume', uselist=False)
 
 
 class EduExperience(Experience):
@@ -162,7 +162,7 @@ class EduExperience(Experience):
     specialty = db.Column(db.String(32), nullable=False)
     degree = db.Column(db.String(16))
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
-    resume = db.relationship('Resume', userlist=False)
+    resume = db.relationship('Resume', uselist=False)
 
 
 class ProjectExperience(Experience):
@@ -172,10 +172,13 @@ class ProjectExperience(Experience):
     role = db.Column(db.String(32))
     technologys = db.Column(db.String(64))
     resume_id = db.Column(db.Integer, db.ForeignKey('resume.id'))
-    resume = db.relationship('Resume', userlist=False)
+    resume = db.relationship('Resume', uselist=False)
 
 
+class CompanyDetail(Base):
+    __tablename__ = 'company_detail'
 
+    id = db.Column(db.Integer, primary_key=True)
 
 
 

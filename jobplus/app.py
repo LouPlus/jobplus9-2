@@ -23,7 +23,7 @@ def register_blueprints(app):
     from .handlers import blueprints
     for bp in blueprints:
         app.register_blueprint(bp)
-    pass
+
 
 def register_error_handlers(app):
 

@@ -38,6 +38,16 @@ def userregister():
     return render_template('userregister.html', form=form)
 
 
+@front.route('/companyregister', methods=['GET', 'POST'])
+def companyregister():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        form.create_user()
+        flash('Register success,please login!', 'success')
+        return redirect(url_for('.login'))
+    return render_template('companyregister.html', form=form)
+
+
 @front.route('/logout')
 @login_required
 def logout():
