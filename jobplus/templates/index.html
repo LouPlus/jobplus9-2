@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_pagination %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+<div class="jumbotron">
+  <div class="container">
+      <h1>JOBPLUS</h1>
+      <p>Work Is Not Work But Works!</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<ul class="nav nav-tabs list-title">
+  <li role="presentation" class="active"><a href="#">Job Recommendations</a></li>  
+</ul>
+
+<div class="newest-job-list">
+  <div class="col-sm-6 col-md-4">
+    <div class="job-box">
+      <div class="caption">
+        <b>JobName [Posted n days ago]</b>
+        <p>Work requirements</p>
+        <span class="label label-default">welfare(complete with jinja for)</span>
+      </div>
+      <hr>
+      <div class="media">
+        <div class="media-left">
+          <a href="#">
+            <img class="media-project" src="#">
+          </a>
+        </div>
+        <div class="media-body"><h4 class="media-heading">Media Heading</h4>CompanyName</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="list-more">
+  <a href="#" class="btn btn-success btn-lg list-more-btn">See More</a>
+</p>
+
+
+<ul class="nav nav-tabs list-title">
+  <li role="presentation" class="active"><a href="#">Latest Company</a></li>
+</ul>
+
+<div class="newest-company-list">
+  <div class="col-sm-6 col-md-3 company-item">
+    <div class="thumbnail">
+      <img src="#">
+      <div class="caption">
+        <h3>CompanyName</h3>
+        <p>description</p>
+      </div>
+      <hr>
+      <p>Number of recruits: k</p>
+    </div>
+  </div>
+
+
+</div>    
+
+<p class="list-more">
+  <a href="#" class="btn btn-success btn-lg list-more-btn">See More</a>
+</p>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
