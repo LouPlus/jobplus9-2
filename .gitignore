@@ -10,7 +10,7 @@ Destop.ini
 *.egg-info
 dist
 build
-
+master
 
 .idea/*
 .vscode/*
